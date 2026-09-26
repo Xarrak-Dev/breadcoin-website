@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="./src/style.css" rel="stylesheet">
+    <script type="module" src="/src/login.js"></script>
+    <title>Login</title>
+</head>
+<body>
+    <div x-data="{login:true}">
+        <form id="login-form" x-show="login">
+            <div class="flex-col flex max-w-sm mx-auto mt-60 " >
+                <h1 class="text-4xl text-center mb-10">Login</h1>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required class="border rounded-md px-2 mb-5">
+
+                <label for="password">password</label>
+                <input type="text" id="password" name="password" required class="border rounded-md px-2">
+
+                <button type="submit" class="bg-gray-300 hover:bg-gray-400 cursor-pointer rounded-md w-3/4 self-center mt-5 py-0.5">Login</button>
+                <button class="bg-gray-300 hover:bg-gray-400 cursor-pointer rounded-md w-3/4 self-center mt-3 py-0.5" x-on:click="login = !login">Register Account</button>
+            </div>
+            
+        </form>
+
+        <form id="register-form" x-show="!login">
+            <div class="flex-col flex max-w-sm mx-auto mt-60 " >
+                <h1 class="text-4xl text-center mb-10">Create New Account</h1>
+                <label for="username2">Username</label>
+                <input type="text" id="username2" name="username2" required class="border rounded-md px-2 mb-5">
+
+                <label for="password2">password</label>
+                <input type="text" id="password2" name="password2" required class="border rounded-md px-2">
+
+                <button type="submit" class="bg-gray-300 hover:bg-gray-400 cursor-pointer rounded-md w-3/4 self-center mt-5 py-0.5">Create</button>
+                <button class="bg-gray-300 hover:bg-gray-400 cursor-pointer rounded-md w-3/4 self-center mt-3 py-0.5" x-on:click="login = !login">Already have an account?</button>
+            </div>
+            
+        </form>
+    </div>
+
+    <script>
+        if (localStorage.getItem('authtoken') != null) {
+                alert("already logged in")
+                window.location.href = "/";
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            const data = await fetch('https://api.breadfriend.org/auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user: username,  
+                    pass: password 
+                })
+            })
+            const token = await data.text()
+            if(token.length === 64) {
+                localStorage.setItem('authtoken', token);
+                console.log('set authtoken:', token)
+                localStorage.setItem('username', username);
+                console.log('set username:', username);
+                window.location.href = "/";
+            }
+            else if (token == "error"){
+                alert("ibncorrect pasword");
+            }
+            else if(token == "no user"){
+                alert("user does not exist");
+            }
+        })
+
+        document.getElementById('register-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const username = document.getElementById("username2").value;
+            const password = document.getElementById("password2").value;
+
+            const data = await fetch('https://api.breadfriend.org/user/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: username,  
+                    password: password 
+                })
+            })
+            const token = await data.text()
+            if(token == "registered") {
+               alert("Registered. log in now")
+               window.location.href = "/login"
+            }
+            else {
+                alert(token)
+            }
+        })
+        
+    </script>
+</body>
+</html>
