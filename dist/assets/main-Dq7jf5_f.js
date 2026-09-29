@@ -1,1 +1,0 @@
-import{t as e}from"./module.esm-lwYekrsH.js";window.Alpine=e,e.store(`balance`,{amount:1e3}),e.store(`user`,{name:localStorage.getItem(`username`)}),e.start();

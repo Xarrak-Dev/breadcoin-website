@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-  <script type="module" crossorigin src="/assets/login-Bs7ecZzk.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/module.esm-lwYekrsH.js">
-  <link rel="stylesheet" crossorigin href="/assets/module-CUOQzWpo.css">
+  <script type="module" crossorigin src="/assets/login-CYyw2ZQk.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/module.esm-DXcex3Uq.js">
+  <link rel="stylesheet" crossorigin href="/assets/module-2TFUNtjp.css">
 </head>
 <body>
     <div x-data="{login:true}">
@@ -51,7 +51,7 @@
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
-            const data = await fetch('https://api.breadfriend.org/auth', {
+            const data = await fetch('https://api.breadfriend.org/user/auth', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
